@@ -630,7 +630,7 @@ def mask_matrices(matrices, thresholds):
 
     # Replace nans, coming from False * np.inf, with 0s
     # (trick to find nans in masked: a number is nan if it's not >= - np.inf)
-    mask[True - (mask >= -np.inf)] = False
+    mask[np.bitwise_xor(True, (mask >= -np.inf))] = False
 
     return np.array(mask, dtype=bool)
 
@@ -676,7 +676,6 @@ def _stretched_metric_2d(x, y, stretch, ref_angle):
     # Create the array of points (one per row) for which to compute the
     # stretched distance
     points = np.vstack([x, y]).T
-
     # Compute the matrix D[i, j] of euclidean distances among points i and j
     D = scipy.spatial.distance_matrix(points, points)
 
