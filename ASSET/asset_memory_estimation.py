@@ -20,6 +20,7 @@ sts = np.load('../ASSET_fMRI/activations_st.npy')
 # take only the first 100 channels
 for i in range(50, 1000, 50):
     number_of_channels = i
+    print('number_of_channels', number_of_channels)
     sts = sts[0:number_of_channels]
 
     # 1) Build the intersection matrix `imat` (optional) and the associated
@@ -62,12 +63,15 @@ for i in range(50, 1000, 50):
     epsilon = 10
     minsize = 2
     stretch = 2
+    try:
+        cmat = asset.cluster_matrix_entries(mask, epsilon, minsize, stretch)
+        np.save('../ASSET_fMRI/cmat%i.npy' % number_of_channels, cmat)
+        mask = np.load('../ASSET_fMRI/cmat%i.npy' % number_of_channels)
 
-    cmat = asset.cluster_matrix_entries(mask, epsilon, minsize, stretch)
-    np.save('../ASSET_fMRI/cmat%i.npy' % number_of_channels, cmat)
-    mask = np.load('../ASSET_fMRI/cmat%i.npy' % number_of_channels)
+        # 5) Extract sequences of synchronous events associated to each worm
 
-    # 5) Extract sequences of synchronous events associated to each worm
-
-    sse = asset.extract_sse(sts, xedges, yedges, cmat)
-    np.save('../ASSET_fMRI/sse%i.npy' % number_of_channels, sse)
+        sse = asset.extract_sse(sts, xedges, yedges, cmat)
+        np.save('../ASSET_fMRI/sse%i.npy' % number_of_channels, sse)
+    except MemoryError:
+        print('MemoryError occurred for number of channels: %i'
+              % number_of_channels)

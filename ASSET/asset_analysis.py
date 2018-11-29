@@ -18,8 +18,8 @@ import asset
 
 # data preprocessing in preprocessing_data.py file
 sts = np.load('../ASSET_fMRI/activations_st.npy')
-# take only the first 100 channels
-number_of_channels = 100
+# take only the first N channels
+number_of_channels = 10
 sts = sts[0:number_of_channels]
 
 
@@ -58,7 +58,7 @@ jmat = np.load('../ASSET_fMRI/jmat%i.npy' % number_of_channels)
 alpha1 = 0.99
 alpha2 = 0.99999
 mask = asset.mask_matrices([pmat, jmat], [alpha1, alpha2])
-np.save('../ASSET_fMRI/mask%i.npy' % number_of_channels, jmat)
+np.save('../ASSET_fMRI/mask%i.npy' % number_of_channels, mask)
 mask = np.load('../ASSET_fMRI/mask%i.npy' % number_of_channels)
 
 # 4) Cluster significant elements of imat into diagonal structures ("DSs"):
@@ -66,8 +66,12 @@ mask = np.load('../ASSET_fMRI/mask%i.npy' % number_of_channels)
 epsilon = 10
 minsize = 2
 stretch = 2
+
 cmat = asset.cluster_matrix_entries(mask, epsilon, minsize, stretch)
+np.save('../ASSET_fMRI/cmat%i.npy' % number_of_channels, cmat)
+mask = np.load('../ASSET_fMRI/cmat%i.npy' % number_of_channels)
 
 # 5) Extract sequences of synchronous events associated to each worm
 
 sse = asset.extract_sse(sts, xedges, yedges, cmat)
+np.save('../ASSET_fMRI/sse%i.npy' % number_of_channels, sse)
