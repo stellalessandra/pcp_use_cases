@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --job-name spade_analysis
+#SBATCH --workdir ./
+#SBATCH -o /home/a.stella/Documents/qsub/spade_fmri/spade_analysis.out
+#SBATCH -e  /home/a.stella/Documents/qsub/spade_fmri/spade_analysis.err
+#SBATCH --array 0
+#SBATCH --time 6-00:00:00
+#SBATCH --mail-type=END
+python spade_analysis.py
