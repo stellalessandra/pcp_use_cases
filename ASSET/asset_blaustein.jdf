@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --job-name asset_analysis
+#SBATCH --workdir ./
+#SBATCH -o /home/a.stella/Documents/qsub/asset_analysis/asset_analysis.out
+#SBATCH -e  /home/a.stella/Documents/qsub/asset_analysis/asset_analysis.err
+#SBATCH --array 0
+#SBATCH --time 6-00:00:00
+#SBATCH --mail-type=END
+python asset_analysis.py
