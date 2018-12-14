@@ -18,7 +18,7 @@ import asset
 # data preprocessing in preprocessing_data.py file
 sts = np.load('../ASSET_fMRI/activations_st.npy')
 # take only the first 100 channels
-for i in range(50, 1000, 50):
+for i in range(33865, 33866):
     number_of_channels = i
     print('number_of_channels', number_of_channels)
     sts = sts[0:number_of_channels]
@@ -38,7 +38,7 @@ for i in range(50, 1000, 50):
     yedges = np.load('../ASSET_fMRI/yedges%i.npy' % number_of_channels)
 
     pmat, xedges, yedges = asset.probability_matrix_analytical(
-        spiketrains=sts, binsize=binsize, dt=dt, kernel_width=1*pq.s)
+        spiketrains=sts, binsize=binsize, dt=dt, kernel_width=10*pq.s)
     np.save('../ASSET_fMRI/pmat%i.npy' % number_of_channels, pmat)
     pmat = np.load('../ASSET_fMRI/pmat%i.npy' % number_of_channels)
 
@@ -62,7 +62,7 @@ for i in range(50, 1000, 50):
 
     epsilon = 10
     minsize = 2
-    stretch = 2
+    stretch = 5
     try:
         cmat = asset.cluster_matrix_entries(mask, epsilon, minsize, stretch)
         np.save('../ASSET_fMRI/cmat%i.npy' % number_of_channels, cmat)
